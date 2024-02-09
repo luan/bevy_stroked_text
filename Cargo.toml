@@ -2,6 +2,13 @@
 name = "bevy_stroked_text"
 version = "0.1.0"
 edition = "2021"
+description = "A Bevy plugin for stroked text rendering"
+categories = ["game-development"]
+authors = ["Luan Santos"]
+keywords = ["gamedev", "bevy", "bevy_text"]
+repository = "https://github.com/luan/bevy_stroked_text"
+license = "MIT OR Apache-2.0"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
