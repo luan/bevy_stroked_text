@@ -106,7 +106,6 @@ fn refresh_text_system(
             }
         } else {
             commands.entity(entity).with_children(|builder| {
-                info!("Creating text entity {:?}", stroked_text);
                 builder.spawn(Text2dBundle {
                     text: Text::from_section(
                         stroked_text.text.clone(),
