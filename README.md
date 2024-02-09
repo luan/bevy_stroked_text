@@ -7,6 +7,8 @@
 A Bevy plugin for stroked text rendering. This plugin is experimental and may not have performance or quality suitable for production use.
 The way this plugin works currently is by rendering 8 copies of the text with a 1 pixel offset in each direction, then rendering the original text on top of that. This is not the most efficient way to render stroked text, but it is the easiest to implement and works well enough for now.
 
+![CleanShot 2024-02-08 at 22 55 49@2x](https://github.com/luan/bevy_stroked_text/assets/223760/8d553eaf-3778-46a2-8f99-ffede2f72adc)
+
 ## Usage
 
 Add the plugin to your app
