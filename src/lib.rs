@@ -94,7 +94,6 @@ fn refresh_text_system(
     mut child_text_query: Query<(&mut Text, &Transform)>,
 ) {
     for (entity, stroked_text, children) in &mut query {
-        let stroke_width = stroked_text.stroke_width;
         if let Some(children) = children {
             for &child in children.iter() {
                 if let Ok((mut cursor_text, transform)) = child_text_query.get_mut(child) {
@@ -121,7 +120,7 @@ fn refresh_text_system(
                     text_anchor: stroked_text.text_anchor,
                     ..default()
                 });
-                let s = stroke_width;
+                let s = stroked_text.stroke_width;
                 for offset in [
                     Vec3::new(s, s, -1.),
                     Vec3::new(-s, -s, -1.),
