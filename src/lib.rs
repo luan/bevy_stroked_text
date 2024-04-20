@@ -16,6 +16,7 @@ pub struct StrokedText {
     pub font: Handle<Font>,
     pub font_size: f32,
     pub text_anchor: Anchor,
+    pub stroke_width: f32,
 }
 
 impl Default for StrokedText {
@@ -27,6 +28,7 @@ impl Default for StrokedText {
             font: Default::default(),
             font_size: 32.0,
             text_anchor: Anchor::Center,
+            stroke_width: 1.0,
         }
     }
 }
@@ -92,6 +94,7 @@ fn refresh_text_system(
     mut child_text_query: Query<(&mut Text, &Transform)>,
 ) {
     for (entity, stroked_text, children) in &mut query {
+        let stroke_width = stroked_text.stroke_width;
         if let Some(children) = children {
             for &child in children.iter() {
                 if let Ok((mut cursor_text, transform)) = child_text_query.get_mut(child) {
@@ -118,15 +121,16 @@ fn refresh_text_system(
                     text_anchor: stroked_text.text_anchor,
                     ..default()
                 });
+                let s = stroke_width;
                 for offset in [
-                    Vec3::new(1., 1., -1.),
-                    Vec3::new(-1., -1., -1.),
-                    Vec3::new(1., -1., -1.),
-                    Vec3::new(-1., 1., -1.),
-                    Vec3::new(0., 1., -1.),
-                    Vec3::new(0., -1., -1.),
-                    Vec3::new(1., 0., -1.),
-                    Vec3::new(-1., 0., -1.),
+                    Vec3::new(s, s, -1.),
+                    Vec3::new(-s, -s, -1.),
+                    Vec3::new(s, -s, -1.),
+                    Vec3::new(-s, s, -1.),
+                    Vec3::new(0., s, -1.),
+                    Vec3::new(0., -s, -1.),
+                    Vec3::new(s, 0., -1.),
+                    Vec3::new(-s, 0., -1.),
                 ] {
                     builder.spawn(Text2dBundle {
                         text: Text::from_section(
