@@ -1,4 +1,4 @@
-use bevy::{prelude::*, sprite::Anchor};
+use bevy::{prelude::*, sprite::Anchor, text::BreakLineOn};
 
 pub struct StrokedTextPlugin;
 
@@ -16,6 +16,8 @@ pub struct StrokedText {
     pub font: Handle<Font>,
     pub font_size: f32,
     pub text_anchor: Anchor,
+    pub justify_text: JustifyText,
+    pub linebreak_behavior: BreakLineOn,
 }
 
 impl Default for StrokedText {
@@ -27,6 +29,8 @@ impl Default for StrokedText {
             font: Default::default(),
             font_size: 32.0,
             text_anchor: Anchor::Center,
+            justify_text: JustifyText::default(),
+            linebreak_behavior: BreakLineOn::WordBoundary,
         }
     }
 }
@@ -84,6 +88,27 @@ impl StrokedTextBundle {
         self.transform = transform;
         self
     }
+
+    pub fn with_justify(mut self, justify: JustifyText) -> Self {
+        self.text.justify_text = justify;
+        self
+    }
+
+    pub fn with_linebreak(mut self, linebreak: BreakLineOn) -> Self {
+        self.text.linebreak_behavior = linebreak;
+        self
+    }
+}
+
+trait TextLineBreakExt {
+    fn with_linebreak(self, linebreak: BreakLineOn) -> Self;
+}
+
+impl TextLineBreakExt for Text {
+    fn with_linebreak(mut self, linebreak: BreakLineOn) -> Self {
+        self.linebreak_behavior = linebreak;
+        self
+    }
 }
 
 fn refresh_text_system(
@@ -97,6 +122,8 @@ fn refresh_text_system(
                 if let Ok((mut cursor_text, transform)) = child_text_query.get_mut(child) {
                     cursor_text.sections[0].value = stroked_text.text.clone();
                     cursor_text.sections[0].style.font_size = stroked_text.font_size;
+                    cursor_text.justify = stroked_text.justify_text;
+                    cursor_text.linebreak_behavior = stroked_text.linebreak_behavior;
                     if transform.translation.z < 0. {
                         cursor_text.sections[0].style.color = stroked_text.stroke_color;
                     } else {
@@ -114,7 +141,9 @@ fn refresh_text_system(
                             font_size: stroked_text.font_size,
                             color: stroked_text.color,
                         },
-                    ),
+                    )
+                    .with_justify(stroked_text.justify_text)
+                    .with_linebreak(stroked_text.linebreak_behavior),
                     text_anchor: stroked_text.text_anchor,
                     ..default()
                 });
