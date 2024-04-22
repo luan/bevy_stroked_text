@@ -37,7 +37,8 @@ Add a StrokedTextBundle to your entity
 
 | bevy | bevy_stroked_text |
 | ---- | ----------------- |
-| 0.12 | 0.10, main        |
+| 0.13 | 0.2, main         |
+| 0.12 | 0.1               |
 
 ## License
 
