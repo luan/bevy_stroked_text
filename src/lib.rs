@@ -18,6 +18,7 @@ pub struct StrokedText {
     pub text_anchor: Anchor,
     pub justify_text: JustifyText,
     pub linebreak_behavior: BreakLineOn,
+    pub stroke_width: f32,
 }
 
 impl Default for StrokedText {
@@ -31,6 +32,7 @@ impl Default for StrokedText {
             text_anchor: Anchor::Center,
             justify_text: JustifyText::default(),
             linebreak_behavior: BreakLineOn::WordBoundary,
+            stroke_width: 1.0,
         }
     }
 }
@@ -147,15 +149,16 @@ fn refresh_text_system(
                     text_anchor: stroked_text.text_anchor,
                     ..default()
                 });
+                let s = stroked_text.stroke_width;
                 for offset in [
-                    Vec3::new(1., 1., -1.),
-                    Vec3::new(-1., -1., -1.),
-                    Vec3::new(1., -1., -1.),
-                    Vec3::new(-1., 1., -1.),
-                    Vec3::new(0., 1., -1.),
-                    Vec3::new(0., -1., -1.),
-                    Vec3::new(1., 0., -1.),
-                    Vec3::new(-1., 0., -1.),
+                    Vec3::new(s, s, -1.),
+                    Vec3::new(-s, -s, -1.),
+                    Vec3::new(s, -s, -1.),
+                    Vec3::new(-s, s, -1.),
+                    Vec3::new(0., s, -1.),
+                    Vec3::new(0., -s, -1.),
+                    Vec3::new(s, 0., -1.),
+                    Vec3::new(-s, 0., -1.),
                 ] {
                     builder.spawn(Text2dBundle {
                         text: Text::from_section(
